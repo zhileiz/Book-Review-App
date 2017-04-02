@@ -5,20 +5,43 @@
   <div class="col-md-8">
     <h2><%= @book.title %></h2>
     <h3><%= @book.author %></h3>
+    <div class="average-review-rating" data-score=<%= @average_review%>> by <%= @book.reviews.size %> reviews: </div>
     <h5><%= @book.description %></h5>
+    <% if user_signed_in? %>
+      <% if @book.user == current_user %>
+        <%= link_to "Edit", edit_book_path(@book) %>
+        <%= link_to "Delete", book_path(@book), method: :delete, data: {confirm: "Are you sure?"} %>
+      <% end %>
+    <% end %>
+    <%= link_to "Back", root_path %>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-4">
-    <!--Where the reviews will go -->
+    <%= link_to "Add Review", new_book_review_path(@book) %>
+  </div>
+  <div class="col-md-8">
+    <%= render @book.reviews %>
   </div>
 </div>
 
-<% if user_signed_in? %>
-  <% if @book.user == current_user %>
-    <%= link_to "Edt Info", edit_book_path(@book) %>
-    <%= link_to "Delete", book_path(@book), method: :delete, data: {confirm: "Are you sure?"} %>
-  <% end %>
-<% end %>
-<%= link_to "Back", root_path %>
+<script>
+  $('.review-rating').raty({
+    readOnly:true,
+    score:function(){
+      return $(this).attr('data-score');
+    },
+    path: '/assets/'
+  })
+</script>
+
+<script>
+  $('.average-review-rating').raty({
+    readOnly:true,
+    path: '/assets/',
+    score: function(){
+      return $(this).attr('data-score');
+    }
+  });
+</script>

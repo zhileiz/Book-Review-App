@@ -1,0 +1,8 @@
+<div class="review-rating" data-score="<%= review.rating %>"></div>
+<p>
+  <%= review.comment %>
+</p>
+<% if review.user == current_user %>
+  <%= link_to "Edit", edit_book_review_path(@book, review) %>
+  <%= link_to "Delete", book_review_path(@book, review), method: :delete %>
+<% end %>
